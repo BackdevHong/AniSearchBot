@@ -60,7 +60,7 @@ module.exports = {
       )
       .setImage(`https://image.tmdb.org/t/p/original${result.backdrop_path}`)
 
-      if (result.created_by) {
+      if (result.created_by.length !== 0) {
         embed.setAuthor(
           {
             name: `원작자 : ${result.created_by[0].name}`

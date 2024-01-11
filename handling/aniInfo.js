@@ -1,6 +1,6 @@
-const { default: axios } = require("axios");
 const dotenv = require("dotenv");
 const { aniInfoEmbed } = require("../embed/aniInfoEmbed");
+const axios = require('axios');
 
 dotenv.config()
 
@@ -12,18 +12,7 @@ module.exports = {
   aniInfoHandling : async (interaction) => {
     await interaction.deferReply()
     const aniName = interaction.options.getString("이름")
-
-
-    const axios = require('axios');
-
-    // const getAniTVSeries = {
-    //   method: 'GET',
-    //         headers: {
-    //     accept: 'application/json',
-    //     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NDg4NzFkMGU0OTM4MTYxNTEyMzFjZDM1NzljNzc4YiIsInN1YiI6IjYzMWNhNjM2ODU2NmQyMDA3ZGY2MjI5OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FH6LqRQ5UcieRx3CJ6ovA5yk0HM_xvXDc1m_lKDc3Ig'
-    //   }
-    // };
-
+    
     let id = 0;
     const getAniIDOption = {
       method: 'GET',

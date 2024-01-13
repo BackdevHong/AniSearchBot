@@ -7,6 +7,10 @@ const {
 const dotenv = require("dotenv");
 const { registerCommands } = require("./deploy-commands");
 const { aniInfoHandling } = require("./handling/aniInfo");
+const video = require("./video.json");
+const { newVideoEmbed } = require("./embed/newVideoEmbed");
+const axios = require('axios');
+const fs = require('fs')
 
 dotenv.config();
 
@@ -35,6 +39,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 
     if (interaction.channel.id !== process.env.CHANNEL_BOT) {
+      console.log(interaction.channel.id)
+      console.log(process.env.CHANNEL_BOT)
       return interaction.reply({
         ephemeral: true,
         content: "여기서는 사용하실 수 없는 명령어입니다."
@@ -53,3 +59,68 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 client.login(process.env.TOKEN);
   
+setInterval(async () => {
+  let channel;
+
+  const guild = client.guilds.fetch(process.env.GUILD_ID).then((v) => {
+    channel = v.channels.cache.get(process.env.CHANNEL_YT)
+  })
+
+  const getLatestYTIDOption = {
+    method: 'GET',
+    url: `https://www.googleapis.com/youtube/v3/search`,
+    headers: {
+      accept: 'application/json',
+    },
+    params : {
+      key : process.env.API_YT,
+      part: "snippet",
+      channelId: process.env.YTC_ID,
+      maxResults: 1,
+      order: "date",
+      q: ""
+    }
+  };
+  
+  axios
+      .request(getLatestYTIDOption)
+      .then((v) => {
+        const id = v.data.items[0].id.videoId
+        const prevVideo = video
+        
+        if (video.LastVideoId !== id) {
+          prevVideo.LastVideoId = id
+
+          const getVideoOption = {
+            method: 'GET',
+            url: `https://www.googleapis.com/youtube/v3/videos`,
+            headers: {
+              accept: 'application/json',
+            },
+            params : {
+              key : process.env.API_YT,
+              part: "statistics, contentDetails",
+              id: id,
+              q: ""
+            }
+          };
+
+          axios
+            .request(getVideoOption)
+            .then((c) => {
+              return channel.send({
+                content: "<@&972351492679938078>",
+                embeds: [newVideoEmbed(v.data.items[0], c.data.items[0])]
+              })
+            })
+            .catch((error) => {
+              console.log(error)
+            })
+
+            fs.writeFileSync("./video.json", JSON.stringify(prevVideo))
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+}, 10000 * 30);

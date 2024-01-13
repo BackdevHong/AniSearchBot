@@ -68,16 +68,15 @@ setInterval(async () => {
 
   const getLatestYTIDOption = {
     method: 'GET',
-    url: `https://www.googleapis.com/youtube/v3/search`,
+    url: `https://www.googleapis.com/youtube/v3/playlistItems`,
     headers: {
       accept: 'application/json',
     },
     params : {
       key : process.env.API_YT,
       part: "snippet",
-      channelId: process.env.YTC_ID,
-      maxResults: 2,
-      order: "date",
+      playlistId: process.env.YTC_ID,
+      maxResults: 1,
       q: ""
     }
   };
@@ -85,7 +84,7 @@ setInterval(async () => {
   axios
       .request(getLatestYTIDOption)
       .then((v) => {
-        const id = v.data.items[0].id.videoId
+        const id = v.data.items[0].snippet.resourceId.videoId
         const prevVideo = video
         
         if (video.LastVideoId !== id) {
@@ -123,4 +122,4 @@ setInterval(async () => {
       .catch((error) => {
         console.log(error)
       })
-}, 10000 * 30);
+}, 10000);

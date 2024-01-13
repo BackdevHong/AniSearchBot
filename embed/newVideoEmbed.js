@@ -7,15 +7,12 @@ function durationCalculator(duration) {
   return lastStr
 }
 
-function titleEdit(title) {
-  return title.replace(/&quot;/g, '"')
-}
-
 module.exports = {
   newVideoEmbed : (result, video) => {
+    console.log(result, video)
     const embed = new EmbedBuilder()
-      .setTitle(`${titleEdit(result.snippet.title)}`)
-      .setURL(`https://www.youtube.com/watch?v=${result.id.videoId}`)
+      .setTitle(`${result.snippet.title}`)
+      .setURL(`https://www.youtube.com/watch?v=${result.snippet.resourceId.videoId}`)
       .setDescription("여러분! 새영상이 업로드 됬어요! 확인하러 가시죠!")
       .addFields({
         name: "조회수",
@@ -32,7 +29,7 @@ module.exports = {
         value: `${video.statistics.likeCount}`,
         inline: true
       })
-      .setImage(result.snippet.thumbnails.high.url)
+      .setImage(result.snippet.thumbnails.standard.url)
       .setAuthor(
         {
           name: "애푸덕님의 새로운 영상이 업로드 되었습니다!"

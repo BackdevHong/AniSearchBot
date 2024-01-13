@@ -8,7 +8,7 @@ const dotenv = require("dotenv");
 const { registerCommands } = require("./deploy-commands");
 const { aniInfoHandling } = require("./handling/aniInfo");
 const video = require("./video.json");
-const { newVideoEmbed } = require("./embed/newVideoEmbed");
+const { newVideoEmbed } = require("./embed/newVideoEmbed.js");
 const axios = require('axios');
 const fs = require('fs')
 

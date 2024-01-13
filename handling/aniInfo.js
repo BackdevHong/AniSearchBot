@@ -1,5 +1,5 @@
 const dotenv = require("dotenv");
-const { aniInfoEmbed } = require("../embed/aniInfoEmbed");
+const { aniInfoEmbed } = require("../embed/aniInfoEmbed.js");
 const axios = require('axios');
 
 dotenv.config()

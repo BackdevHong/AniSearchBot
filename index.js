@@ -76,7 +76,7 @@ setInterval(async () => {
       key : process.env.API_YT,
       part: "snippet",
       channelId: process.env.YTC_ID,
-      maxResults: 1,
+      maxResults: 2,
       order: "date",
       q: ""
     }
@@ -108,6 +108,8 @@ setInterval(async () => {
           axios
             .request(getVideoOption)
             .then((c) => {
+              fs.writeFileSync("./video.json", JSON.stringify(prevVideo))
+
               return channel.send({
                 content: "<@&972351492679938078>",
                 embeds: [newVideoEmbed(v.data.items[0], c.data.items[0])]
@@ -116,8 +118,6 @@ setInterval(async () => {
             .catch((error) => {
               console.log(error)
             })
-
-            fs.writeFileSync("./video.json", JSON.stringify(prevVideo))
         }
       })
       .catch((error) => {
